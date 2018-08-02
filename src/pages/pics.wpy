@@ -1,0 +1,89 @@
+<style lang="less">
+.imgs{
+  width: 100%;
+  margin: 0%;
+  padding: 0%;
+}
+.section_gap{
+  width: 100%;
+  margin: 0%;
+  padding: 0%;
+}
+</style>
+<template lang="wxml">
+  <view class="section_gap" wx:for="{{imgsArr}}" wx:for-item="item" wx:key="item">
+    <view>
+      <image class="imgs" mode="widthFix" src="{{item.src}}"></image>
+    </view>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+
+  export default class Index extends wepy.page {
+    config = {
+      navigationBarTitleText: '万花阁',
+      window: {
+        enablePullDownRefresh: true
+      }
+    }
+    data = {
+      category: '',
+      description: '',
+      imgcount: '',
+      num: '',
+      tag: '',
+      title: '',
+      imgsArr: [],
+      showpicnum: 10
+    }
+    methods = {
+      tap(id) {
+        wepy.navigateTo({
+          url: `/pages/pics?id=${id}`  // 打开一个新的同路由页面，但指定不同的数据初始值
+        })
+      }
+    }
+    loadList(id) {
+      wepy.request({
+        url: 'https://www.nichuiniu.cn/v1/wanHGImg/getImageById?id=' + id,
+        success: (response) => {
+          this.title = response.data.title
+          this.category = response.data.category
+          this.num = response.data.num
+          this.imgcount = response.data.imgcount
+          this.getMore()
+          this.$apply()
+          wepy.hideLoading()
+        }
+      })
+    }
+    events = {
+    }
+    onLoad(options = {}) {
+      wepy.showLoading({
+        title: '加载中'
+      })
+      console.log(options.id)
+      this.loadList(options.id)
+    }
+    onReachBottom() {
+      this.getMore()
+    }
+    getMore () {
+      let arr = []
+      let i = this.showpicnum - 9
+      if (this.showpicnum > this.imgcount) {
+        this.showpicnum = this.imgcount
+      }
+      for (i; i <= this.showpicnum; i++) {
+        let src = 'https://img.nichuiniu.cn/images/' + this.category + '/' + this.num + '/' + i + '.jpg'
+        arr.push({src: src})
+      }
+      this.imgsArr = this.imgsArr.concat(arr)
+      this.showpicnum += 10
+      console.log(this.showpicnum)
+      // this.$apply()
+    }
+  }
+</script>

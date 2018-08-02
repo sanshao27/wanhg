@@ -1,0 +1,79 @@
+<style lang="less">
+.imgs{
+  width: 100%;
+  margin: 0%;
+  padding: 0%;
+}
+.section_gap{
+  width: 100%;
+  margin: 0%;
+  padding: 0%;
+}
+</style>
+<template lang="wxml">
+  <view class="section_gap" wx:for="{{array}}" wx:for-item="item" wx:key="item">
+    <view @tap="tap({{item.id}})">
+      <image class="imgs" mode="{{item.mode}}" src="{{item.src}}"></image>
+    </view>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+
+  export default class Index extends wepy.page {
+    config = {
+      navigationBarTitleText: '万花阁',
+      window: {
+        enablePullDownRefresh: true
+      }
+    }
+    data = {
+      currentPage4: 1,
+      limit: 10,
+      total: 100,
+      array: [],
+      group: 0,
+      type: 'cn'
+    }
+    methods = {
+      tap(id) {
+        wepy.navigateTo({
+          url: `/pages/pics?id=${id}`  // 打开一个新的同路由页面，但指定不同的数据初始值
+        })
+      }
+    }
+    loadList() {
+      wepy.request({
+        url: `https://www.nichuiniu.cn/v1/wanHGImg/selectImgByPage?pageNum=` + this.currentPage4 +
+        '&pageSize=' + this.limit + '&category=' + this.type,
+        success: (res) => {
+          console.log(res)
+          let items = res.data.list
+          let arr = []
+          for (var i = 0; i < items.length; i++) {
+            let text = items[i].title
+            let src = 'https://img.nichuiniu.cn/images/' + items[i].category + '/' + items[i].num + '/1.jpg'
+            let mode = 'widthFix'
+            let id = items[i].id
+            arr.push({src: src, mode: mode, text: text, id: id})
+          }
+          this.array = this.array.concat(arr)
+          this.$apply()
+          wepy.hideLoading()
+        }
+      })
+    }
+    events = {
+    }
+    onLoad() {
+      wepy.showLoading({
+        title: '加载中'
+      })
+      this.loadList()
+    }
+    onReachBottom() {
+      this.currentPage++
+      this.loadList()
+    }
+  }
+</script>
