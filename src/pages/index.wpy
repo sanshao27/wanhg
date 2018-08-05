@@ -1,20 +1,51 @@
 <style lang="less">
-.imgs{
-  width: 100%;
-  margin: 0%;
-  padding: 0%;
-}
 .section_gap{
   width: 100%;
-  margin: 0%;
+  margin: 42px 0 0 0;
   padding: 0%;
+}
+.imgs{
+  width: 94%;
+  margin: 0 0 0 0;
+  padding: 0 3% 0 3%;
+}
+.weui-navbar{
+  width: 100%;
+  margin: 0%;
+  padding: 0 0 10px 0;
+  position: fixed;
+  top: 0px;
+  z-index: 100;
+  background-color: #ffffff;
+}
+.weui-navbar_title{
+  float: left;
+  width: 50px;
+  line-height: 30px;
+  margin-left: 10px;
+  font-size: 18px;
+}
+.navbar_slider{
+  border-bottom: 2px solid #FF0000;
+  color: #FF0000;
+  width:fit-content;
+  width:-webkit-fit-content;
+  width:-moz-fit-content;
 }
 </style>
 <template lang="wxml">
-  <view class="section_gap" wx:for="{{array}}" wx:for-item="item" wx:key="item">
-    <view @tap="tap({{item.id}})">
-      <image class="imgs" mode="{{item.mode}}" src="{{item.src}}"></image>
-    </view>
+  <view class="container">
+      <view class="weui-navbar">
+          <view wx:for="{{tabs}}" wx:key="*this" id="{{item.type}}" wx:key="item" @tap="tabClick" class="weui-navbar_title">
+              <view class="{{type == item.type ? 'navbar_slider' : ''}}">{{item.name}}</view>
+          </view>
+      </view>
+      <view class="section_gap" wx:for="{{array}}" wx:for-item="item" wx:key="item">
+          <view @tap="tap({{item.id}})">
+            <image class="imgs" mode="{{item.mode}}" src="{{item.src}}"></image>
+          </view>
+        </view>
+      </view>
   </view>
 </template>
 <script>
@@ -28,18 +59,33 @@
       }
     }
     data = {
+      tabs: [
+        // {type: 'rihan', name: '推荐'},
+        {type: 'rihan', name: '日韩'},
+        {type: 'cn', name: '国内'},
+        {type: 'gangtai', name: '港台'},
+        {type: 'xiuren_VIP', name: '模特'}
+      ],
       currentPage4: 1,
       limit: 10,
-      total: 100,
       array: [],
-      group: 0,
-      type: 'cn'
+      type: 'rihan'
     }
     methods = {
       tap(id) {
         wepy.navigateTo({
           url: `/pages/pics?id=${id}`  // 打开一个新的同路由页面，但指定不同的数据初始值
         })
+      },
+      tabClick (e) {
+        this.type = e.currentTarget.id
+        this.array = []
+        this.currentPage4 = 0
+        this.$apply()
+        wepy.showLoading({
+          title: '加载中'
+        })
+        this.loadList()
       }
     }
     loadList() {
@@ -58,6 +104,7 @@
             arr.push({src: src, mode: mode, text: text, id: id})
           }
           this.array = this.array.concat(arr)
+          console.log(this.array)
           this.$apply()
           wepy.hideLoading()
         }
@@ -65,15 +112,23 @@
     }
     events = {
     }
-    onLoad() {
+    async onLoad() {
       wepy.showLoading({
         title: '加载中'
       })
       this.loadList()
     }
     onReachBottom() {
-      this.currentPage++
+      this.currentPage4++
+      // this.$apply()
+      console.log(this.currentPage4++)
       this.loadList()
+    }
+    onShareAppMessage() {
+      return {
+        title: '美好就在眼前',
+        path: '/pages/index'
+      }
     }
   }
 </script>

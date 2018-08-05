@@ -1,12 +1,12 @@
 <style lang="less">
 .imgs{
-  width: 100%;
-  margin: 0%;
-  padding: 0%;
+  width: 94%;
+  margin: 0 0 0 0;
+  padding: 0 3% 0 3%;
 }
 .section_gap{
   width: 100%;
-  margin: 0%;
+  margin: 42px 0 0 0;
   padding: 0%;
 }
 </style>
