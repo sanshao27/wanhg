@@ -6,8 +6,27 @@
 }
 .section_gap{
   width: 100%;
-  margin: 42px 0 0 0;
+  margin: 2px 0 0 0;
   padding: 0%;
+}
+.operate_button{
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 0;
+  box-sizing: border-box;
+  background-color:"#ededed";
+  margin-top: 1.5rem;
+  }
+.share_next{
+  float: left;
+  width: 90%;
+  margin:0% 0% 4% 0%;
+}
+.blank{
+  margin-bottom: 6rem;
 }
 </style>
 <template lang="wxml">
@@ -15,6 +34,11 @@
     <view>
       <image class="imgs" mode="widthFix" src="{{item.src}}"></image>
     </view>
+  </view>
+  <view class="operate_button">
+    <button open-type="share" size="default" type="primary" class="share_next"> 分享 </button>
+    <button @tap="collect" size="default" type="default" class="share_next"> 收藏 </button>
+    <view class="blank"></view>
   </view>
 </template>
 <script>
@@ -35,13 +59,25 @@
       tag: '',
       title: '',
       imgsArr: [],
-      showpicnum: 10
+      showpicnum: 10,
+      id: 1000
     }
     methods = {
-      tap(id) {
-        wepy.navigateTo({
-          url: `/pages/pics?id=${id}`  // 打开一个新的同路由页面，但指定不同的数据初始值
+      collect() {
+        let myCollection = wepy.getStorageSync('my_collection')
+        console.log(myCollection)
+        wepy.showToast({
+          title: '收藏成功',
+          duration: 1000
         })
+        if (myCollection.indexOf(parseInt(this.id)) < 0) {
+          myCollection.push(parseInt(this.id))
+          wepy.setStorageSync('my_collection', myCollection)
+          this.$apply()
+          console.log(myCollection)
+        } else {
+          console.log(myCollection)
+        }
       }
     }
     loadList(id) {
@@ -60,11 +96,20 @@
     }
     events = {
     }
+    onShareAppMessage() {
+      console.log('/pages/pics?id=' + this.id)
+      return {
+        title: '秀色掩今古，荷花羞玉颜！',
+        path: '/pages/pics?id=' + this.id
+      }
+    }
     onLoad(options = {}) {
       wepy.showLoading({
         title: '加载中'
       })
       console.log(options.id)
+      this.id = options.id
+      this.$apply()
       this.loadList(options.id)
     }
     onReachBottom() {
@@ -82,7 +127,7 @@
       }
       this.imgsArr = this.imgsArr.concat(arr)
       this.showpicnum += 10
-      console.log(this.showpicnum)
+      // console.log(this.showpicnum)
       // this.$apply()
     }
   }

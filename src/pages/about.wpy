@@ -1,0 +1,70 @@
+<style lang="less">
+.about{
+  margin-top: 40px;
+}
+.about-p{
+  margin:0% 0% 5% 0%;
+  padding:0% 3% 0% 3%;
+  height:100%;
+  float: left;
+  width: 94%;
+  font-size:16px;
+  line-height:180%;
+}
+.support{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+}
+</style>
+<template lang="wxml">
+  <view class="container">
+    <view class='about-p'>内容来自互联网，如有侵权，请联系删除</view>
+    <view class="about-p"><button open-type="contact">联系我们</button></view>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+
+  export default class Index extends wepy.page {
+    config = {
+      navigationBarTitleText: '万花阁',
+      window: {
+        enablePullDownRefresh: true
+      }
+    }
+    data = {
+      tabs: [
+      ],
+      currentPage4: 1,
+      limit: 10,
+      array: [],
+      type: 'rihan'
+    }
+    methods = {
+    }
+    loadList() {
+      wepy.hideLoading()
+    }
+    events = {
+    }
+    onTabItemTap(options = {}) {
+      wepy.showLoading({
+        title: '加载中'
+      })
+      let myCollection = wepy.getStorageSync('my_collection')
+      console.log(myCollection)
+      for (var i in myCollection) {
+        console.log(i)
+      }
+      this.loadList()
+    }
+    onShareAppMessage() {
+      return {
+        title: '秀色掩今古，荷花羞玉颜！',
+        path: '/pages/index'
+      }
+    }
+  }
+</script>

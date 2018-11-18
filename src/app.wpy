@@ -17,6 +17,8 @@ export default class extends wepy.app {
   config = {
     pages: [
       'pages/index',
+      'pages/hottest',
+      'pages/about',
       'pages/pics'
     ],
     window: {
@@ -24,11 +26,39 @@ export default class extends wepy.app {
       navigationBarBackgroundColor: '#fff',
       navigationBarTitleText: 'WeChat',
       navigationBarTextStyle: 'black'
+    },
+    'tabBar': {
+      'color': '#666666',
+      'selectedColor': '#F3514F',
+      'borderStyle': 'white',
+      'backgroundColor': '#FAFAFA',
+      'list': [
+        {
+          'iconPath': 'images/tab/home.png',
+          'selectedIconPath': 'images/tab/red/home-active.png',
+          'pagePath': 'pages/index',
+          'text': '精选'
+        },
+        {
+          'iconPath': 'images/tab/order.png',
+          'selectedIconPath': 'images/tab/red/order-active.png',
+          'pagePath': 'pages/hottest',
+          'text': '热榜'
+        },
+        {
+          'iconPath': 'images/tab/user.png',
+          'selectedIconPath': 'images/tab/red/user-active.png',
+          'pagePath': 'pages/about',
+          'text': '我'
+        }
+      ]
     }
   }
 
+  // let collection = this.$parent.globalData.collection 在page中读取全局变量的方法
   globalData = {
-    userInfo: null
+    userInfo: null,
+    collection: []
   }
 
   constructor () {
