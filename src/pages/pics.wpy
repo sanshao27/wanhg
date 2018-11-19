@@ -77,7 +77,10 @@
         // console.log(img)
         // console.log(typeof (img))
         // console.log(typeof (myCollection))
-        if (myCollection.indexOf(img) < 0) {
+        // console.log(myCollection.toString().indexOf(img.toString()))
+        // console.log(myCollection.toString())
+        // console.log(img.toString())
+        if (myCollection.toString().indexOf(img.toString()) < 0) {
           myCollection.push(img)
           // this.pushList(myCollection, 0, img)
           wepy.setStorageSync('my_collection', myCollection)
