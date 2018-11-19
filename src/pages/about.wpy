@@ -17,9 +17,38 @@
   display: flex;
   justify-content: center;
 }
+.section_imgs{
+  width: 100%;
+  margin: 2px 0 0 0;
+  padding: 0%;
+}
+.section_gap{
+  width: 100%;
+  margin: 2px 0 0 0;
+  padding: 0%;
+}
+.section_img{
+  width: 32%;
+  margin: 2px 0.5% 0 0.5%;
+  // padding: 0 3% 0 3%;
+  padding: 0%;
+  display:inline-block
+}
+.imgs{
+  width: 100%;
+  height: 100px;
+  margin: 0 0 0 0;
+}
 </style>
 <template lang="wxml">
   <view class="container">
+    <view wx:if="{{len(array)<1}}"> 您还未有收藏的图集~</view>
+    <view wx:else class="section_imgs">
+      <view class="section_img" style="flex-direction:row;" wx:for="{{array}}" wx:for-item="item" wx:key="item">
+            <image @tap="tap({{item.id}})" class="imgs" mode="{{item.mode}}" src="{{item.src}}"></image>
+        </view>
+      </view>
+    </view>
     <view class='about-p'>内容来自互联网，如有侵权，请联系删除</view>
     <view class="about-p"><button open-type="contact">联系我们</button></view>
   </view>
@@ -39,10 +68,45 @@
       ],
       currentPage4: 1,
       limit: 10,
-      array: [],
-      type: 'rihan'
+      array: []
     }
     methods = {
+      tap(id) {
+        // console.log(id)
+        wepy.request({
+          url: `https://www.nichuiniu.cn/v1/wanHGImg/updateByPrimaryKeySelective?id=` + parseInt(id) +
+          '&scores=' + parseInt(this.scores),
+          success: (res) => {
+            console.log(res)
+          }
+        })
+        wepy.navigateTo({
+          url: `/pages/pics?id=${id}`  // 打开一个新的同路由页面，但指定不同的数据初始值
+        })
+      }
+    }
+    init() {
+      wepy.showLoading({
+        title: '加载中'
+      })
+      this.array = []
+      let myCollection = wepy.getStorageSync('my_collection')
+      console.log(myCollection)
+      let arr = []
+      for (var i in myCollection) {
+        if (myCollection[i].length === 3) {
+          let src = 'https://img.nichuiniu.cn/images/' + myCollection[i][1] + '/' + myCollection[i][2] + '/1.jpg'
+          let mode = 'aspectFill'
+          let id = myCollection[i][0]
+          arr.push({src: src, mode: mode, id: id})
+        } else {
+          console.log('collection must have three value like: id category num,but this collection is ' + myCollection[i])
+        }
+      }
+      this.array = this.array.concat(arr)
+      console.log(this.array)
+      this.$apply()
+      this.loadList()
     }
     loadList() {
       wepy.hideLoading()
@@ -50,15 +114,10 @@
     events = {
     }
     onTabItemTap(options = {}) {
-      wepy.showLoading({
-        title: '加载中'
-      })
-      let myCollection = wepy.getStorageSync('my_collection')
-      console.log(myCollection)
-      for (var i in myCollection) {
-        console.log(i)
-      }
-      this.loadList()
+      this.init()
+    }
+    onShow(options = {}) {
+      this.init()
     }
     onShareAppMessage() {
       return {

@@ -70,10 +70,10 @@
       tap(id) {
         // console.log(id)
         wepy.request({
-          url: `https://www.nichuiniu.cn/v1/wanHGImg/updateByPrimaryKeySelective?id=` + id +
-          '&scores=' + this.scores,
+          url: `https://www.nichuiniu.cn/v1/wanHGImg/updateByPrimaryKeySelective?id=` + parseInt(id) +
+          '&scores=' + parseInt(this.scores),
           success: (res) => {
-            // console.log(res)
+            console.log(res)
           }
         })
         wepy.navigateTo({

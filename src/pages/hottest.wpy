@@ -54,20 +54,21 @@
       }
     }
     data = {
-      tabs: [
-        // {type: 'rihan', name: '推荐'},
-        // {type: 'rihan', name: '日韩'},
-        // {type: 'cn', name: '国内'},
-        // {type: 'gangtai', name: '港台'},
-        // {type: 'xiuren_VIP', name: '模特'}
-      ],
       currentPage4: 1,
       limit: 10,
-      array: []
-      // type: 'rihan'
+      array: [],
+      scores: 2
     }
     methods = {
       tap(id) {
+        // console.log(id)
+        wepy.request({
+          url: `https://www.nichuiniu.cn/v1/wanHGImg/updateByPrimaryKeySelective?id=` + parseInt(id) +
+          '&scores=' + parseInt(this.scores),
+          success: (res) => {
+            console.log(res)
+          }
+        })
         wepy.navigateTo({
           url: `/pages/pics?id=${id}`  // 打开一个新的同路由页面，但指定不同的数据初始值
         })

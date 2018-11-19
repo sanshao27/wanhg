@@ -66,12 +66,20 @@
       collect() {
         let myCollection = wepy.getStorageSync('my_collection')
         console.log(myCollection)
+        if (myCollection.length < 1) {
+          myCollection = []
+        }
         wepy.showToast({
           title: '收藏成功',
           duration: 1000
         })
-        if (myCollection.indexOf(parseInt(this.id)) < 0) {
-          myCollection.push(parseInt(this.id))
+        let img = [this.id, this.category, this.num]
+        // console.log(img)
+        // console.log(typeof (img))
+        // console.log(typeof (myCollection))
+        if (myCollection.indexOf(img) < 0) {
+          myCollection.push(img)
+          // this.pushList(myCollection, 0, img)
           wepy.setStorageSync('my_collection', myCollection)
           this.$apply()
           console.log(myCollection)
@@ -79,6 +87,13 @@
           console.log(myCollection)
         }
       }
+    }
+    pushList (arr, index, value) {
+      if (index >= arr.length) {
+        return
+      }
+      arr[index].push(value)
+      return arr
     }
     loadList(id) {
       wepy.request({
