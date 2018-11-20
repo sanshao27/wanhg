@@ -62,13 +62,13 @@
     methods = {
       tap(id) {
         // console.log(id)
-        wepy.request({
-          url: `https://www.nichuiniu.cn/v1/wanHGImg/updateByPrimaryKeySelective?id=` + parseInt(id) +
-          '&scores=' + parseInt(this.scores),
-          success: (res) => {
-            console.log(res)
-          }
-        })
+        // wepy.request({
+        //   url: `https://www.nichuiniu.cn/v1/wanHGImg/updateByPrimaryKeySelective?id=` + parseInt(id) +
+        //   '&scores=' + parseInt(this.scores),
+        //   success: (res) => {
+        //     console.log(res)
+        //   }
+        // })
         wepy.navigateTo({
           url: `/pages/pics?id=${id}`  // 打开一个新的同路由页面，但指定不同的数据初始值
         })

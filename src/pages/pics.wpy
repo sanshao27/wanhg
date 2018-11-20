@@ -60,12 +60,13 @@
       title: '',
       imgsArr: [],
       showpicnum: 10,
-      id: 1000
+      id: 1000,
+      scores: 5
     }
     methods = {
       collect() {
         let myCollection = wepy.getStorageSync('my_collection')
-        console.log(myCollection)
+        // console.log(myCollection)
         if (myCollection.length < 1) {
           myCollection = []
         }
@@ -86,6 +87,7 @@
           wepy.setStorageSync('my_collection', myCollection)
           this.$apply()
           console.log(myCollection)
+          this.addScores()
         } else {
           console.log(myCollection)
         }
@@ -97,6 +99,15 @@
       }
       arr[index].push(value)
       return arr
+    }
+    addScores() {
+      wepy.request({
+        url: `https://www.nichuiniu.cn/v1/wanHGImg/updateByPrimaryKeySelective?id=` + parseInt(this.id) +
+        '&scores=' + parseInt(this.scores),
+        success: (res) => {
+          console.log(res)
+        }
+      })
     }
     loadList(id) {
       wepy.request({
