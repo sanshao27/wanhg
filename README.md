@@ -18,7 +18,7 @@
 * littleweb，基于vue的前段web应用
 * zz，基于springboot4.0+mybatis实现前后端分离工程
 
-[Imgur](https://i.imgur.com/69uolbK.jpg)
+![](https://i.imgur.com/69uolbK.jpg)
 
 ## Links
 [SpiderScrapyArticle](https://github.com/libp/SpiderScrapyArticle)  
