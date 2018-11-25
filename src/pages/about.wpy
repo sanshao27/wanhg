@@ -42,7 +42,7 @@
 </style>
 <template lang="wxml">
   <view class="container">
-    <view wx:if="{{len(array)<1}}"> 您还未有收藏的图集~</view>
+    <view wx:if="{{array.length<1}}"> 您还未有收藏的图集~</view>
     <view wx:else class="section_imgs">
       <view class="section_img" style="flex-direction:row;" wx:for="{{array}}" wx:for-item="item" wx:key="item">
             <image @tap="tap({{item.id}})" class="imgs" mode="{{item.mode}}" src="{{item.src}}"></image>
@@ -91,7 +91,7 @@
       })
       this.array = []
       let myCollection = wepy.getStorageSync('my_collection')
-      console.log(myCollection)
+      // console.log(myCollection)
       let arr = []
       for (var i in myCollection) {
         if (myCollection[i].length === 3) {
